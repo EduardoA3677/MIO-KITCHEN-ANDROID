@@ -1,0 +1,29 @@
+name: Mio Kitcken - Release
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build APK
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: 17
+          distribution: oracle
+          cache: 'gradle'
+
+      - name: Build APK
+        run: bash ./gradlew assembleRelease --stacktrace
+
+      - name: Upload all APKs
+        uses: actions/upload-artifact@v4
+        with:
+         name: logfox-apks
+         compression-level: 0
+         path: app/build/outputs/apk/**/*.apk
